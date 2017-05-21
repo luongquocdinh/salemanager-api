@@ -1,0 +1,29 @@
+{
+  "name": "commercial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/index.js",
+  "bin": {
+    "commercial": "index.js"
+  },
+  "scripts": {
+    "start": "nodemon bin/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.1",
+    "crypto": "0.0.3",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "fast-csv": "^2.4.0",
+    "formidable": "^1.1.1",
+    "mongoose": "^4.8.7",
+    "nodemon": "^1.11.0",
+    "optimist": "^0.6.1",
+    "path": "^0.12.7"
+  }
+}
