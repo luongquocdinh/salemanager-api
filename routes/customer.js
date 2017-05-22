@@ -50,25 +50,23 @@ router.post('/addMultiple', (req, res) => {
             fs.unlink(files.file.path, function () {})
         })
         .on('end', function () {
-            addCustomer(customerList)
+            for (var i = 0; i < customerList.length; i++) {
+                var data = Customer({
+                    name: customerList[i][0],
+                    phone: customerList[i][1]
+                })
+                data.save()
+            }
             fs.unlink(files.file.path, function () {})
+            return res.json({
+                data: customerList
+            })
         })
         } else {
             console.log(err)
         }
     })
 })
-
-function addCustomer (customerList) {
-    for (var i = 0; i < customerList.length; i++) {
-        var data = Customer({
-            name: customerList[i][0],
-            phone: customerList[i][1]
-        })
-        data.save()
-    }
-    return customerList
-}
 
 router.get('/listCustomer', (req, res) => {
     var page = req.query.page || 1
