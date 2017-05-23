@@ -4,7 +4,7 @@ var Schema = mongoose.Schema
 var sale = new Schema({
     'name': {type: String},
     'password': {type: String},
-    'saleCode': {type: saleCode},
+    'saleCode': {type: String},
     'is_active': {type: Boolean, default: true},
     'is_enable': {type: Boolean, default: true},
     "created_date": { type: Date, default: Date.now() },

@@ -105,11 +105,11 @@ router.get('/listNotSale', (req, res) => {
         })
 })
 
-router.post('/:id/assignSale', (req, res) => {
-    var id = req.params.id
+router.post('/assignSale', (req, res) => {
+    var customerId = req.body.customerId
     var saleId = req.body.saleId
 
-    Customer.findOne({_id: id})
+    Customer.findOne({_id: customerId})
         .then(customer => {
             customer.saleId = saleId
             customer.is_sale = true
