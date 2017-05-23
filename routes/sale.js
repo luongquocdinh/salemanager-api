@@ -19,7 +19,7 @@ var saleStatus = require('./../models/saleStatus')
 router.post('/add', (req, res) => {
     var name = req.body.name
     var password = req.body.password
-    var saltValue = crypto.createHash("sha256").update(name).digest('hex')
+    var saleCode = req.body.saleCode
 
     Sale.findOne({name: name})
         .then(data => {
@@ -27,7 +27,7 @@ router.post('/add', (req, res) => {
                 let sale = Sale({
                     name: name,
                     password: password,
-                    saltValue: saltValue
+                    saleCode: saleCode
                 })
                 sale.save()
                     .then(r => {
