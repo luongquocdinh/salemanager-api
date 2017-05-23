@@ -10,10 +10,10 @@ var Product = require('./../models/product')
 
 router.post('/add', (req, res) =>{
     var name = req.body.name
-    var typeId = req.body.typeId
+    var type = req.body.type
     var data = Product({
         name: name,
-        typeId: typeId
+        type: type
     })
     Product.findOne({name: name}, function (err, product) {
         if (err) {
@@ -31,11 +31,7 @@ router.post('/add', (req, res) =>{
 })
 
 router.get('/listProduct', (req, res) => {
-    var page = req.query.page || 1
-    var per_page = req.query.per_page || 10
     Product.find({})
-        .skip(per_page * (page - 1))
-        .limit(per_page)
         .lean()
         .exec()
         .then(data => {

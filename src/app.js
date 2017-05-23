@@ -5,10 +5,9 @@ var session = require('express-session')
 var argv = require('optimist').argv
 var app = express()
 var cors = require('cors')
-var routes = require('./../routes/index')
 var customer = require('./../routes/customer')
-var productType = require('./../routes/productType')
 var product = require('./../routes/product')
+var sale = require('./../routes/sale')
 let path = require('path')
 
 var conf = {
@@ -24,9 +23,8 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.use(express.static('public'))
 
-app.use('/', routes)
 app.use('/customer', customer)
-app.use('/productType', productType)
 app.use('/product', product)
+app.use('/sale', sale)
 
 module.exports = app

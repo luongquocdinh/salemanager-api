@@ -10,6 +10,7 @@ var responseSuccess = require('./../helper/responseSuccess')
 var responseError = require('./../helper/responseError')
 
 var Customer = require('./../models/customer')
+var saleStatus = require('./../models/saleStatus')
 
 router.post('/add', (req, res) =>{
     var name = req.body.name
@@ -69,11 +70,7 @@ router.post('/addMultiple', (req, res) => {
 })
 
 router.get('/listCustomer', (req, res) => {
-    var page = req.query.page || 1
-    var per_page = req.query.per_page || 10
     Customer.find({})
-        .skip(per_page * (page - 1))
-        .limit(per_page)
         .lean()
         .exec()
         .then(data => {
@@ -88,6 +85,58 @@ router.get('/listCustomer', (req, res) => {
                 error: err
             })
         })
+})
+
+router.get('/listNotSale', (req, res) => {
+    Customer.find({is_sale: false})
+        .lean()
+        .exec()
+        .then(data => {
+            return res.json({
+                data: data,
+                error: null
+            })
+        })
+        .catch(err => {
+            return res.json({
+                data: null,
+                error: err
+            })
+        })
+})
+
+router.post('/:id/assignSale', (req, res) => {
+    var id = req.params.id
+    var saleId = req.body.saleId
+
+    Customer.findOne({_id: id})
+        .then(customer => {
+            customer.saleId = saleId
+            customer.is_sale = true
+            customer.save()
+            let status = saleStatus({
+                customerId: customer._id,
+                saleId: saleId
+            })
+            status.save()
+                .then(data => {
+                    return res.json({
+                        customer: customer,
+                        error: null
+                    })
+                }).catch(err => {
+                    return res.json({
+                        customer: null,
+                        error: err
+                    })
+                })
+        }).catch(err => {
+            return res.json({
+                customer: null,
+                error: err
+            })
+        })
+
 })
 
 module.exports = router

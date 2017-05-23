@@ -1,13 +1,14 @@
 var http = require('http')
 var app = require('./../src/app')
 var mongoose = require('mongoose')
+mongoose.Promise = require('bluebird');
 var server = http.createServer(app)
 
 var boot = function () {
   server.listen(app.get('port'), function () {
     console.info('Express server listening on port ' + app.get('port'))
   })
-  mongoose.connect('mongodb://heroku_ncdhz4rn:j51dpjdmpitu8v7onnt61uhi56@ds133281.mlab.com:33281/heroku_ncdhz4rn', function (err, result) {
+  mongoose.connect('mongodb://heroku_b2bz9ldg:e2jml2cku1ooake26hv0u94vnf@ds149481.mlab.com:49481/heroku_b2bz9ldg', function (err, result) {
     if (err) return console.log(err)
     console.log('Connect database successful')
   })
