@@ -6,21 +6,16 @@ var router = express.Router()
 var responseSuccess = require('./../helper/responseSuccess')
 var responseError = require('./../helper/responseError')
 
-var Product = require('./../models/product')
+var ProductType = require('./../models/productType')
 
-router.post('/add', (req, res) =>{
+router.post('/add', (req, res) => {
     var name = req.body.name
-    var typeId = req.body.typeId
-    var price = req.body.price
-    var bonus = req.body.bonus
-    var data = Product({
+    var data = ProductType({
         name: name,
-        typeId: typeId,
-        price: price,
-        bonus: bonus,
         is_active: true
     })
-    Product.findOne({name: name}, function (err, product) {
+
+    ProductType.findOne({name: name}, function (err, product) {
         if (err) {
             return console.log(err)
         }
@@ -29,32 +24,14 @@ router.post('/add', (req, res) =>{
                 if (err) {
                     return console.log(err)
                 }
-                return res.json(responseSuccess('Add product successful', data))
+                return res.json(responseSuccess('Add product type successful', data))
             })
         }
     })
 })
 
-router.get('/listProduct', (req, res) => {
-    Product.find({})
-        .lean()
-        .exec()
-        .then(data => {
-            return res.json({
-                data: data,
-                error: null
-            })
-        })
-        .catch(err => {
-            return res.json({
-                data: null,
-                error: err
-            })
-        })
-})
-
-router.get('/:id', (req, res) => {
-    Product.findOne({_id: req.params.id})
+router.get('/listProductType', (req, res) => {
+    ProductType.find({})
         .then(data => {
             return res.json({
                 data: data,
@@ -65,11 +42,11 @@ router.get('/:id', (req, res) => {
                 data: null,
                 error: err
             })
-        })
+        }) 
 })
 
 router.post('/:id/delete', (req, res) => {
-    Product.findOne({_id: req.params.id})
+    ProductType.findOne({_id: req.params.id})
         .then(data => {
             data.is_active = false
             data.save(function(err) {
@@ -88,4 +65,5 @@ router.post('/:id/delete', (req, res) => {
             })
         })
 })
+
 module.exports = router

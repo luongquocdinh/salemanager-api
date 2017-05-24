@@ -7,6 +7,7 @@ var app = express()
 var cors = require('cors')
 var customer = require('./../routes/customer')
 var product = require('./../routes/product')
+var productType = require('./../routes/productType')
 var sale = require('./../routes/sale')
 let path = require('path')
 
@@ -26,5 +27,6 @@ app.use(express.static('public'))
 app.use('/customer', customer)
 app.use('/product', product)
 app.use('/sale', sale)
+app.use('/productType', productType)
 
 module.exports = app

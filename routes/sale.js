@@ -14,6 +14,8 @@ var responseError = require('./../helper/responseError')
 
 var Sale = require('./../models/sale')
 var Customer = require('./../models/customer')
+var Product = require('./../models/product')
+var ProductBySale = require('./../models/productBySale')
 var saleStatus = require('./../models/saleStatus')
 
 router.post('/add', (req, res) => {
@@ -79,6 +81,55 @@ router.get('/:id/listCustomer', (req, res) => {
                 error: err
             })
         })
+})
+
+router.post('/:id/addProduct', (req, res) => {
+    var id = req.params.id
+    var product = req.body.product
+    var typeId = req.body.typeId
+    var price = req.body.price
+    var bonus = req.body.bonus
+
+    var dataProduct = Product({
+        name: product,
+        typeId: typeId,
+        price: price,
+        bonus: bonus,
+        is_active: true
+    })
+
+    Product.findOne({name: product}, function (err, product) {
+        console.log("here")
+        if (err) {
+            return res.json(responseError("Error Add product"))
+        }
+        if (product) {
+            return res.json(responseError("Product exist"))
+        }
+        if (!product) {
+            dataProduct.save(function (err, p) {
+                console.log("1")
+                if (err) {
+                    return res.json(responseError("Error Save product"))
+                }
+                var data = ProductBySale({
+                    productId: p._id,
+                    SaleId: req.params.id
+                })
+                data.save(function (err) {
+                    console.log("2")
+                    if (err) {
+                        return res.json(responseError("Error Save product"))
+                    }
+                    let response = {
+                        dataProduct,
+                        data
+                    }
+                    return res.json(responseSuccess("Successful add product by sale", response))
+                })
+            })
+        }
+    })
 })
 
 module.exports = router

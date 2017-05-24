@@ -136,7 +136,6 @@ router.post('/assignSale', (req, res) => {
                 error: err
             })
         })
-
 })
 
 module.exports = router
