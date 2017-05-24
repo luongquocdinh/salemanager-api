@@ -6,6 +6,12 @@ var customer = new Schema({
     'phone': {type: String},
     'is_sale': {type: String, default: false},
     'saleId': {type: String, default: null},
+    'listProduct': [{
+        'productId': {type: String},
+        'name': {type: String},
+        'price': {type: String},
+        'bonus': {type: String}
+    }],
     "created_date": { type: Date, default: Date.now() },
     "updated_date"    : { type: Date, default: Date.now() }
 },

@@ -45,6 +45,28 @@ router.get('/listProductType', (req, res) => {
         }) 
 })
 
+router.post('/:id/update', (req, res) => {
+    var name = req.body.name
+    ProductType.findOne({_id: req.params.id})
+        .then(data => {
+            data.name = name
+            data.save(function (err) {
+                if (err) {
+                    return res.json(responseError("Update product type error"))
+                }
+                return res.json({
+                    data: data,
+                    error: null
+                })
+            })
+        }).catch(err => {
+            return res.json({
+                data: null,
+                error: err
+            })
+        })
+})
+
 router.post('/:id/delete', (req, res) => {
     ProductType.findOne({_id: req.params.id})
         .then(data => {

@@ -10,12 +10,12 @@ var Product = require('./../models/product')
 
 router.post('/add', (req, res) =>{
     var name = req.body.name
-    var typeId = req.body.typeId
+    var type = req.body.type
     var price = req.body.price
     var bonus = req.body.bonus
     var data = Product({
         name: name,
-        typeId: typeId,
+        type: type,
         price: price,
         bonus: bonus,
         is_active: true
@@ -59,6 +59,34 @@ router.get('/:id', (req, res) => {
             return res.json({
                 data: data,
                 error: null
+            })
+        }).catch(err => {
+            return res.json({
+                data: null,
+                error: err
+            })
+        })
+})
+
+router.post('/:id/update', (req, res) => {
+    var name = req.body.name
+    var type = req.body.type
+    var price = req.body.price
+    var bonus = req.body.bonus
+    Product.findOne({_id: req.params.id})
+        .then(data => {
+            data.name = name
+            data.type = type
+            data.price = price
+            data.bonus = bonus
+            data.save(function (err) {
+                if (err) {
+                    return res.json(responseError("Update error"))
+                }
+                return res.json({
+                    data: data,
+                    error: null
+                })
             })
         }).catch(err => {
             return res.json({

@@ -132,4 +132,36 @@ router.post('/:id/addProduct', (req, res) => {
     })
 })
 
+router.post('/customer', (req, res) => {
+    var customerId = req.body.customerId
+    var productId = req.body.productId
+
+    Customer.findOne({_id: customerId})
+            .then(customer => {
+                Product.findOne({_id: productId})
+                    .then(product => {
+                        customer.listProduct.push({
+                            'productId': productId,
+                            'name': product.name,
+                            'price': product.price,
+                            'bonus': product.bonus
+                        })
+                        customer.save(function (err) {
+                            if (err) {
+                                return res.json(responseError("error"))
+                            }
+                            return res.json({
+                                data: customer,
+                                error: null
+                            })
+                        })
+                    })
+            }).catch(err => {
+                return res.json({
+                    data: null,
+                    error: err
+                })
+            })
+})
+
 module.exports = router
