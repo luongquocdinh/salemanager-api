@@ -4,7 +4,7 @@ var Schema = mongoose.Schema
 var customer = new Schema({
     'name': {type: String},
     'phone': {type: String},
-    'is_sale': {type: String, default: false},
+    'is_sale': {type: Boolean, default: false},
     'saleId': {type: Number, default: null},
     'listProduct': [{
         'productId': {type: String},
