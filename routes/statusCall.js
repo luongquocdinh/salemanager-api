@@ -32,10 +32,9 @@ router.post('/getList', (req, res) => {
         })
 })
 
-router.post('/getOne', (req, res) => {
-    var saleId = req.body.saleId
-    var customerId = req.body.customerId
-    statusCall.find({saleId: saleId, customerId: customerId})
+router.get('/:id', (req, res) => {
+    var id = req.params.id
+    statusCall.findOne({_id: id})
         .then(data => {
             return res.json({
                 data: data,
