@@ -3,7 +3,7 @@ var Schema = mongoose.Schema
 
 var product = new Schema({
     'name': {type: String},
-    'type': {type: String},
+    'typeId': {type: String},
     'price': {type: Number},
     'bonus': {type: Number},
     'is_active': {type: Boolean},

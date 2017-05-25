@@ -10,12 +10,12 @@ var Product = require('./../models/product')
 
 router.post('/add', (req, res) =>{
     var name = req.body.name
-    var type = req.body.type
+    var typeId = req.body.typeId
     var price = req.body.price
     var bonus = req.body.bonus
     var data = Product({
         name: name,
-        type: type,
+        typeId: typeId,
         price: price,
         bonus: bonus,
         is_active: true
@@ -70,13 +70,13 @@ router.get('/:id', (req, res) => {
 
 router.post('/:id/update', (req, res) => {
     var name = req.body.name
-    var type = req.body.type
+    var typeId = req.body.typeId
     var price = req.body.price
     var bonus = req.body.bonus
     Product.findOne({_id: req.params.id})
         .then(data => {
             data.name = name
-            data.type = type
+            data.typeId = typeId
             data.price = price
             data.bonus = bonus
             data.save(function (err) {
