@@ -5,7 +5,7 @@ var customer = new Schema({
     'name': {type: String},
     'phone': {type: String},
     'is_sale': {type: String, default: false},
-    'saleId': {type: String, default: null},
+    'saleId': {type: Number, default: null},
     'listProduct': [{
         'productId': {type: String},
         'name': {type: String},

@@ -3,7 +3,7 @@ var Schema = mongoose.Schema
 
 var productBySale = new Schema({
     'productId': {type: String},
-    'SaleId': {type: String},
+    'SaleId': {type: Number},
     "created_date": { type: Date, default: Date.now() },
     "updated_date"    : { type: Date, default: Date.now() }
 },

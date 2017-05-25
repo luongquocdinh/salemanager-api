@@ -8,7 +8,10 @@ var cors = require('cors')
 var customer = require('./../routes/customer')
 var product = require('./../routes/product')
 var productType = require('./../routes/productType')
+var statusCall = require('./../routes/statusCall')
 var sale = require('./../routes/sale')
+var historySale = require('./../routes/historySale')
+
 let path = require('path')
 
 var conf = {
@@ -28,5 +31,7 @@ app.use('/customer', customer)
 app.use('/product', product)
 app.use('/sale', sale)
 app.use('/productType', productType)
+app.use('/statusCall', statusCall)
+app.use('/historySale', historySale)
 
 module.exports = app
