@@ -16,8 +16,26 @@ var Sale = require('./../models/sale')
 var Customer = require('./../models/customer')
 var statusCall = require('./../models/statusCall')
 
-router.get('/getList', (req, res) => {
-    statusCall.find({})
+router.post('/getList', (req, res) => {
+    var saleId = req.body.saleId
+    statusCall.find({saleId: saleId})
+        .then(data => {
+            return res.json({
+                data: data,
+                error: null
+            })
+        }).catch(err => {
+            return res.json({
+                data: null,
+                error: err
+            })
+        })
+})
+
+router.post('/getOne', (req, res) => {
+    var saleId = req.body.saleId
+    var customerId = req.body.customerId
+    statusCall.find({saleId: saleId, customerId: customerId})
         .then(data => {
             return res.json({
                 data: data,
