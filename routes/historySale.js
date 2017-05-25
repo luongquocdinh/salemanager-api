@@ -23,6 +23,8 @@ router.post('/add', (req, res) => {
     var saleCode = req.body.saleCode
     var customer = req.body.customer
     var productId = req.body.productId
+    var status = req.body.status
+    var saleId = req.body.saleId
     Product.findOne({_id: productId})
         .then(r => {
             var data = historySale({
@@ -31,6 +33,8 @@ router.post('/add', (req, res) => {
                 saleCode: saleCode,
                 customer: customer,
                 productName: r.name,
+                status: status,
+                saleId: saleId,
                 price: r.price,
                 bonus: r.bonus
             })
@@ -98,6 +102,9 @@ router.get('/getlist', (req, res) => {
 })
 
 router.post('/getByDate', (req, res) => {
+    let success = 0
+    let waitting = 0
+    let failure = 0
     var dateStart = new Date(req.body.day)
     var dateEnd = new Date(req.body.day)
     dateEnd.setHours(dateEnd.getHours() +24);
@@ -110,9 +117,19 @@ router.post('/getByDate', (req, res) => {
     .lean()
     .exec()
     .then(data => {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].status == 1) {
+                success++
+            } else if (data[i].status == 0) {
+                waitting++
+            } else {
+                failure++
+            }
+        }
         return res.json({
-            data: data,
-            error: null
+            success,
+            waitting,
+            failure
         })
     }).catch(err =>{
         return res.json({
@@ -122,7 +139,50 @@ router.post('/getByDate', (req, res) => {
     })
 })
 
+router.post('/historyByDateForSale', (req, res) => {
+    let success = 0
+    let waitting = 0
+    let failure = 0
+    var dateStart = new Date(req.body.day)
+    var dateEnd = new Date(req.body.day)
+    dateEnd.setHours(dateEnd.getHours() +24);
+    historySale.find({
+        $and: [
+            {saleId: req.body.saleId},
+            {   "saleDate": {
+                    $gte: new Date(dateStart),
+                    $lte: new Date(dateEnd)
+                }
+            }
+        ]
+        })
+        .then(data => {
+            for (var i = 0; i < data.length; i++) {
+            if (data[i].status == 1) {
+                success++
+            } else if (data[i].status == 0) {
+                waitting++
+            } else {
+                failure++
+            }
+        }
+        return res.json({
+            success,
+            waitting,
+            failure
+        })
+        }).catch(err=> {
+            return res.json({
+                data: null,
+                error: err
+            })
+        })
+})
+
 router.post('/getByMonth', (req, res) => {
+    let success = 0
+    let waitting = 0
+    let failure = 0
     var month = req.body.month
     var result = []
     historySale.find({})
@@ -135,9 +195,19 @@ router.post('/getByMonth', (req, res) => {
                         result.push(data[i])
                     }
                 }
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].status == 1) {
+                        success++
+                    } else if (result[i].status == 0) {
+                        waitting++
+                    } else {
+                        failure++
+                    }
+                }
                 return res.json({
-                    data: result,
-                    error: null
+                    success,
+                    waitting,
+                    failure
                 })
             }).catch(err =>{
                 return res.json({
@@ -147,7 +217,47 @@ router.post('/getByMonth', (req, res) => {
             })
 })
 
+router.post('/historyByMonthForSale', (req, res) => {
+    let success = 0
+    let waitting = 0
+    let failure = 0
+    var month = req.body.month
+    var result = []
+    historySale.find({
+            saleId: req.body.saleId
+        }).then(data => {
+            for (var i = 0; i < data.length; i++) {
+                let t = new Date(data[i].saleDate).getMonth()
+                if (t + 1 == month) {
+                    result.push(data[i])
+                }
+            }
+            for (var i = 0; i < result.length; i++) {
+                if (result[i].status == 1) {
+                    success++
+                } else if (result[i].status == 0) {
+                    waitting++
+                } else {
+                    failure++
+                }
+            }
+            return res.json({
+                success,
+                waitting,
+                failure
+            })
+        }).catch(err =>{
+            return res.json({
+                data: null,
+                error: err
+            })
+        })
+})
+
 router.post('/getByYear', (req, res) => {
+    let success = 0
+    let waitting = 0
+    let failure = 0
     var year = req.body.year
     var result = []
     historySale.find({})
@@ -160,9 +270,57 @@ router.post('/getByYear', (req, res) => {
                         result.push(data[i])
                     }
                 }
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].status == 1) {
+                        success++
+                    } else if (result[i].status == 0) {
+                        waitting++
+                    } else {
+                        failure++
+                    }
+                }
                 return res.json({
-                    data: result,
-                    error: null
+                    success,
+                    waitting,
+                    failure
+                })
+            }).catch(err =>{
+                return res.json({
+                    data: null,
+                    error: err
+                })
+            })
+})
+
+router.post('/historyByYearForSale', (req, res) => {
+    let success = 0
+    let waitting = 0
+    let failure = 0
+    var year = req.body.year
+    var result = []
+    historySale.find({saleId: req.body.saleId})
+            .lean()
+            .exec()
+            .then(data => {
+                for (var i = 0; i < data.length; i++) {
+                    let t = new Date(data[i].saleDate).getFullYear()
+                    if (t == year) {
+                        result.push(data[i])
+                    }
+                }
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].status == 1) {
+                        success++
+                    } else if (result[i].status == 0) {
+                        waitting++
+                    } else {
+                        failure++
+                    }
+                }
+                return res.json({
+                    success,
+                    waitting,
+                    failure
                 })
             }).catch(err =>{
                 return res.json({
