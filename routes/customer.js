@@ -34,41 +34,6 @@ router.post('/add', (req, res) =>{
     })
 })
 
-router.post('/addMultiple', (req, res) => {
-    var customerList = []
-    var form = new formidable.IncomingForm({
-    uploadDir: path.join(__dirname, '/../uploads'),
-    keepExtensions: true
-    })
-    form.parse(req, function (err, fields, files) {
-        if (!err) {
-        csv.fromStream(fs.createReadStream(files.file.path))
-        .on('data', function (data) {
-            customerList.push(data)
-        })
-        .on('error', function () {
-            done(null, [responseError("Error")])
-            fs.unlink(files.file.path, function () {})
-        })
-        .on('end', function () {
-            for (var i = 0; i < customerList.length; i++) {
-                var data = Customer({
-                    name: customerList[i][0],
-                    phone: customerList[i][1]
-                })
-                data.save()
-            }
-            fs.unlink(files.file.path, function () {})
-            return res.json({
-                data: customerList
-            })
-        })
-        } else {
-            console.log(err)
-        }
-    })
-})
-
 router.get('/listCustomer', (req, res) => {
     Customer.find({})
         .lean()
