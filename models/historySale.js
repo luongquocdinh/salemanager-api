@@ -9,7 +9,7 @@ var historySale = new Schema({
     "productName": {type: String},
     "status": {type: Number},
     "price": {type: Number},
-    "saleId":{type: String},
+    "saleId":{type: Number},
     "bonus": {type: Number},
     "created_date": { type: Date, default: Date.now() },
     "updated_date"    : { type: Date, default: Date.now() }
