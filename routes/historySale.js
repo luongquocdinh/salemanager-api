@@ -103,9 +103,8 @@ router.get('/getlist', (req, res) => {
 
 router.post('/getByDate', (req, res) => {
     let data_success = []
-    let success = 0
-    let waitting = 0
-    let failure = 0
+    let sum_price = 0
+    let sum_bonus = 0
     var dateStart = new Date(req.body.day)
     var dateEnd = new Date(req.body.day)
     dateEnd.setHours(dateEnd.getHours() +24);
@@ -121,17 +120,14 @@ router.post('/getByDate', (req, res) => {
         for (var i = 0; i < data.length; i++) {
             if (data[i].status == 1) {
                 data_success.push(data[i])
-                success++
+                sum_bonus = sum_bonus + data[i].bonus
+                sum_price = sum_price + data[i].price
             } 
-            // else if (data[i].status == 0) {
-            //     waitting++
-            // } else {
-            //     failure++
-            // }
         }
         return res.json({
             data_success,
-            success
+            sum_bonus,
+            sum_price
         })
     }).catch(err =>{
         return res.json({
@@ -143,9 +139,8 @@ router.post('/getByDate', (req, res) => {
 
 router.post('/historyByDateForSale', (req, res) => {
     let data_success = []
-    let success = 0
-    let waitting = 0
-    let failure = 0
+    let sum_price = 0
+    let sum_bonus = 0
     var dateStart = new Date(req.body.day)
     var dateEnd = new Date(req.body.day)
     dateEnd.setHours(dateEnd.getHours() +24);
@@ -160,20 +155,17 @@ router.post('/historyByDateForSale', (req, res) => {
         ]
         })
         .then(data => {
-            for (var i = 0; i < data.length; i++) {
+             for (var i = 0; i < data.length; i++) {
                 if (data[i].status == 1) {
                     data_success.push(data[i])
-                    success++
+                    sum_bonus = sum_bonus + data[i].bonus
+                    sum_price = sum_price + data[i].price
                 } 
-                // else if (data[i].status == 0) {
-                //     waitting++
-                // } else {
-                //     failure++
-                // }
             }
             return res.json({
                 data_success,
-                success
+                sum_bonus,
+                sum_price
             })
         }).catch(err=> {
             return res.json({
@@ -185,9 +177,8 @@ router.post('/historyByDateForSale', (req, res) => {
 
 router.post('/getByMonth', (req, res) => {
     let data_success = []
-    let success = 0
-    let waitting = 0
-    let failure = 0
+    let sum_price = 0
+    let sum_bonus = 0
     var month = req.body.month
     var result = []
     historySale.find({})
@@ -203,17 +194,14 @@ router.post('/getByMonth', (req, res) => {
                 for (var i = 0; i < result.length; i++) {
                     if (result[i].status == 1) {
                         data_success.push(result[i])
-                        success++
+                        sum_bonus = sum_bonus + result[i].bonus
+                        sum_price = sum_price + result[i].price
                     }
-                    // else if (result[i].status == 0) {
-                    //     waitting++
-                    // } else {
-                    //     failure++
-                    // }
                 }
                 return res.json({
                     data_success,
-                    success
+                    sum_bonus,
+                    sum_price
                 })
             }).catch(err =>{
                 return res.json({
@@ -225,9 +213,8 @@ router.post('/getByMonth', (req, res) => {
 
 router.post('/historyByMonthForSale', (req, res) => {
     let data_success = []
-    let success = 0
-    let waitting = 0
-    let failure = 0
+    let sum_price = 0
+    let sum_bonus = 0
     var month = req.body.month
     var result = []
     historySale.find({
@@ -242,17 +229,14 @@ router.post('/historyByMonthForSale', (req, res) => {
             for (var i = 0; i < result.length; i++) {
                 if (result[i].status == 1) {
                     data_success.push(result[i])
-                    success++
-                } 
-                // else if (result[i].status == 0) {
-                //     waitting++
-                // } else {
-                //     failure++
-                // }
+                    sum_bonus = sum_bonus + result[i].bonus
+                    sum_price = sum_price + result[i].price
+                }
             }
             return res.json({
                 data_success,
-                success
+                sum_bonus,
+                sum_price
             })
         }).catch(err =>{
             return res.json({
@@ -264,9 +248,8 @@ router.post('/historyByMonthForSale', (req, res) => {
 
 router.post('/getByYear', (req, res) => {
     let data_success = []
-    let success = 0
-    let waitting = 0
-    let failure = 0
+    let sum_price = 0
+    let sum_bonus = 0
     var year = req.body.year
     var result = []
     historySale.find({})
@@ -282,17 +265,14 @@ router.post('/getByYear', (req, res) => {
                 for (var i = 0; i < result.length; i++) {
                     if (result[i].status == 1) {
                         data_success.push(result[i])
-                        success++
-                    } 
-                    // else if (result[i].status == 0) {
-                    //     waitting++
-                    // } else {
-                    //     failure++
-                    // }
+                        sum_bonus = sum_bonus + result[i].bonus
+                        sum_price = sum_price + result[i].price
+                    }
                 }
                 return res.json({
                     data_success,
-                    success
+                    sum_bonus,
+                    sum_price
                 })
             }).catch(err =>{
                 return res.json({
@@ -304,9 +284,8 @@ router.post('/getByYear', (req, res) => {
 
 router.post('/historyByYearForSale', (req, res) => {
     let data_success = []
-    let success = 0
-    let waitting = 0
-    let failure = 0
+    let sum_price = 0
+    let sum_bonus = 0
     var year = req.body.year
     var result = []
     historySale.find({saleId: req.body.saleId})
@@ -322,17 +301,14 @@ router.post('/historyByYearForSale', (req, res) => {
                 for (var i = 0; i < result.length; i++) {
                     if (result[i].status == 1) {
                         data_success.push(result[i])
-                        success++
+                        sum_bonus = sum_bonus + result[i].bonus
+                        sum_price = sum_price + result[i].price
                     }
-                    // else if (result[i].status == 0) {
-                    //     waitting++
-                    // } else {
-                    //     failure++
-                    // }
                 }
                 return res.json({
                     data_success,
-                    success
+                    sum_bonus,
+                    sum_price
                 })
             }).catch(err =>{
                 return res.json({
