@@ -55,7 +55,8 @@ router.post('/add', (req, res) => {
         countCall: 1,
         callDate: [Date.now()],
         isWin: req.body.isWin,
-        status: req.body.status
+        status: req.body.status,
+        note: req.body.note
     })
 
 
@@ -75,12 +76,14 @@ router.post('/:id/update', (req, res) => {
     var customerId = req.body.customerId
     var isWin = req.body.isWin
     var status = req.body.status
+    var note = req.body.note
     statusCall.findOne({_id: req.params.id})
         .then(data => {
             data.saleId = saleId
             data.customerId = customerId
             data.isWin = isWin
             data.status = status
+            data.note = note
             data.countCall++
             data.callDate.push(Date.now())
             data.save(function (err) {
