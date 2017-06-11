@@ -11,6 +11,7 @@ var responseError = require('./../helper/responseError')
 
 var Customer = require('./../models/customer')
 var saleStatus = require('./../models/saleStatus')
+var statusCall = require('./../models/statusCall')
 
 router.post('/add', (req, res) =>{
     var name = req.body.name
@@ -85,10 +86,22 @@ router.post('/assignSale', (req, res) => {
             })
             status.save()
                 .then(data => {
-                    return res.json({
-                        customer: customer,
-                        error: null
+                    let status_Call = statusCall({
+                        saleId: saleId,
+                        customerId: customerId,
+                        countCall: 1,
+                        callDate: [Date.now()],
+                        isWin: false,
+                        status: "lead",
+                        note: "none"
                     })
+                    status_Call.save()
+                        .then(data => {
+                            return res.json({
+                                customer: customer,
+                                error: null
+                            })
+                        })
                 }).catch(err => {
                     return res.json({
                         customer: null,
