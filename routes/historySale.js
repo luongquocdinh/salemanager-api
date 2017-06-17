@@ -124,9 +124,9 @@ router.post('/getByDate', (req, res) => {
     .exec()
     .then(data => {
         for (var i = 0; i < data.length; i++) {
-            if (data[i].status == 'win') {
+            if (data[i].status == 1) {
                 success++
-            } else if (data[i].status == 'progress') {
+            } else if (data[i].status == 0) {
                 waitting++
             } else {
                 failure++

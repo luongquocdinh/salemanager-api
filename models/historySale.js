@@ -5,7 +5,7 @@ var historySale = new Schema({
     "date": {type: Date}, // date
     "lead": {type: String}, // lead
     "phone": {type: String}, // phone
-    "product": {type: String}, // product
+    "productName": {type: String}, // product
     "status": {type: Number}, // status
     "next_action": {type: String}, //next_action
     "note": {type: String}, // note
