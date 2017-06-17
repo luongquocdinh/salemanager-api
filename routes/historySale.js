@@ -18,25 +18,29 @@ var Product = require('./../models/product')
 var historySale = require('./../models/historySale')
 
 router.post('/add', (req, res) => {
-    var saleDate = req.body.saleDate
-    var leadCode = req.body.leadCode
-    var saleCode = req.body.saleCode
-    var customer = req.body.customer
-    var productId = req.body.productId
+    var date = req.body.date
+    var lead = req.body.lead
+    var phone = req.body.phone
+    var product = req.body.product
     var status = req.body.status
+    var next_action = req.body.next_action
+    var note = req.body.note
     var saleId = req.body.saleId
-    Product.findOne({_id: productId})
+
+    Product.findOne({name: product})
         .then(r => {
             var data = historySale({
-                saleDate: saleDate,
-                leadCode: leadCode,
-                saleCode: saleCode,
-                customer: customer,
-                productName: r.name,
+                date: date,
+                lead: lead,
+                phone: phone,
+                product: r.name,
                 status: status,
                 saleId: saleId,
                 price: r.price,
-                bonus: r.bonus
+                sold_price: r.sold_price, 
+                bonus: r.bonus,
+                next_action: next_action,
+                note: note
             })
             data.save(function (err) {
                 if (err) {
@@ -111,7 +115,7 @@ router.post('/getByDate', (req, res) => {
     var dateEnd = new Date(req.body.day)
     dateEnd.setHours(dateEnd.getHours() +24);
     historySale.find({
-        "saleDate": {
+        "date": {
             $gte: new Date(dateStart),
             $lte: new Date(dateEnd)
         }
@@ -120,9 +124,9 @@ router.post('/getByDate', (req, res) => {
     .exec()
     .then(data => {
         for (var i = 0; i < data.length; i++) {
-            if (data[i].status == 1) {
+            if (data[i].status == 'win') {
                 success++
-            } else if (data[i].status == 0) {
+            } else if (data[i].status == 'progress') {
                 waitting++
             } else {
                 failure++
@@ -151,7 +155,7 @@ router.post('/historyByDateForSale', (req, res) => {
     historySale.find({
         $and: [
             {saleId: req.body.saleId},
-            {   "saleDate": {
+            {   "date": {
                     $gte: new Date(dateStart),
                     $lte: new Date(dateEnd)
                 }
@@ -192,7 +196,7 @@ router.post('/getByMonth', (req, res) => {
             .exec()
             .then(data => {
                 for (var i = 0; i < data.length; i++) {
-                    let t = new Date(data[i].saleDate).getMonth()
+                    let t = new Date(data[i].date).getMonth()
                     if (t + 1 == month) {
                         result.push(data[i])
                     }
@@ -229,7 +233,7 @@ router.post('/historyByMonthForSale', (req, res) => {
     historySale.find({saleId: saleId})
         .then(data => {
             for (var i = 0; i < data.length; i++) {
-                let t = new Date(data[i].saleDate).getMonth()
+                let t = new Date(data[i].date).getMonth()
                 if (t + 1 == month) {
                     result.push(data[i])
                 }
@@ -267,7 +271,7 @@ router.post('/getByYear', (req, res) => {
             .exec()
             .then(data => {
                 for (var i = 0; i < data.length; i++) {
-                    let t = new Date(data[i].saleDate).getFullYear()
+                    let t = new Date(data[i].date).getFullYear()
                     if (t == year) {
                         result.push(data[i])
                     }
@@ -305,7 +309,7 @@ router.post('/historyByYearForSale', (req, res) => {
             .exec()
             .then(data => {
                 for (var i = 0; i < data.length; i++) {
-                    let t = new Date(data[i].saleDate).getFullYear()
+                    let t = new Date(data[i].date).getFullYear()
                     if (t == year) {
                         result.push(data[i])
                     }
@@ -342,7 +346,7 @@ router.post('/reportByDate', (req, res) => {
     var dateEnd = new Date(req.body.day)
     dateEnd.setHours(dateEnd.getHours() +24);
     historySale.find({
-        "saleDate": {
+        "date": {
             $gte: new Date(dateStart),
             $lte: new Date(dateEnd)
         }
@@ -380,7 +384,7 @@ router.post('/reportByDateForSale', (req, res) => {
     historySale.find({
         $and: [
             {saleId: req.body.saleId},
-            {   "saleDate": {
+            {   "date": {
                     $gte: new Date(dateStart),
                     $lte: new Date(dateEnd)
                 }
@@ -419,7 +423,7 @@ router.post('/reportByMonth', (req, res) => {
             .exec()
             .then(data => {
                 for (var i = 0; i < data.length; i++) {
-                    let t = new Date(data[i].saleDate).getMonth()
+                    let t = new Date(data[i].date).getMonth()
                     if (t + 1 == month) {
                         result.push(data[i])
                     }
@@ -454,7 +458,7 @@ router.post('/reportByMonthForSale', (req, res) => {
             saleId: req.body.saleId
         }).then(data => {
             for (var i = 0; i < data.length; i++) {
-                let t = new Date(data[i].saleDate).getMonth()
+                let t = new Date(data[i].date).getMonth()
                 if (t + 1 == month) {
                     result.push(data[i])
                 }
@@ -490,7 +494,7 @@ router.post('/reportByYear', (req, res) => {
             .exec()
             .then(data => {
                 for (var i = 0; i < data.length; i++) {
-                    let t = new Date(data[i].saleDate).getFullYear()
+                    let t = new Date(data[i].date).getFullYear()
                     if (t == year) {
                         result.push(data[i])
                     }
@@ -526,7 +530,7 @@ router.post('/reportByYearForSale', (req, res) => {
             .exec()
             .then(data => {
                 for (var i = 0; i < data.length; i++) {
-                    let t = new Date(data[i].saleDate).getFullYear()
+                    let t = new Date(data[i].date).getFullYear()
                     if (t == year) {
                         result.push(data[i])
                     }

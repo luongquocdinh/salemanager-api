@@ -5,6 +5,7 @@ var product = new Schema({
     'name': {type: String},
     'typeId': {type: String},
     'price': {type: Number},
+    'sold_price': {type: String},
     'bonus': {type: Number},
     'is_active': {type: Boolean},
     "created_date": { type: Date, default: Date.now() },

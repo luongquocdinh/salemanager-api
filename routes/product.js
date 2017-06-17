@@ -13,10 +13,12 @@ router.post('/add', (req, res) =>{
     var typeId = req.body.typeId
     var price = req.body.price
     var bonus = req.body.bonus
+    var sold_price = req.body.sold_price
     var data = Product({
         name: name,
         typeId: typeId,
         price: price,
+        sold_price: sold_price,
         bonus: bonus,
         is_active: true
     })
@@ -72,6 +74,7 @@ router.post('/:id/update', (req, res) => {
     var name = req.body.name
     var typeId = req.body.typeId
     var price = req.body.price
+    var sold_price = req.body.sold_price
     var bonus = req.body.bonus
     Product.findOne({_id: req.params.id})
         .then(data => {
@@ -79,6 +82,7 @@ router.post('/:id/update', (req, res) => {
             data.typeId = typeId
             data.price = price
             data.bonus = bonus
+            data.sold_price = sold_price
             data.save(function (err) {
                 if (err) {
                     return res.json(responseError("Update error"))
