@@ -105,6 +105,23 @@ router.get('/getlist', (req, res) => {
         })
 })
 
+// List Sale
+router.post('/listSale', (req, res) => {
+    let saleId = req.body.saleId
+    historySale.find({saleId: saleId})
+        .then(data => {
+            return res.json({
+                data: data,
+                error: null
+            })
+        }).catch(err => {
+            return res.json({
+                data: null,
+                error: err
+            })
+        })
+})
+
 
 // Report By Result
 router.post('/getByDate', (req, res) => {
