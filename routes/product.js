@@ -1,26 +1,38 @@
-var express = require('express')
-var path = require('path')
+let express = require('express')
+let path = require('path')
 
-var router = express.Router()
+let router = express.Router()
 
-var responseSuccess = require('./../helper/responseSuccess')
-var responseError = require('./../helper/responseError')
+let responseSuccess = require('./../helper/responseSuccess')
+let responseError = require('./../helper/responseError')
 
-var Product = require('./../models/product')
+let Product = require('./../models/product')
 
 router.post('/add', (req, res) =>{
-    var name = req.body.name
-    var typeId = req.body.typeId
-    var price = req.body.price
-    var bonus = req.body.bonus
-    var sold_price = req.body.sold_price
-    var data = Product({
-        name: name,
+    let typeId = req.body.typeId
+
+    let name = req.body.name
+    let price = req.body.price
+    let comission = req.body.comission
+    let size = req.body.size
+    let color = req.body.color
+    let max_discount_si = req.body.max_discount_si
+    let max_discount_le = req.body.max_discount_le
+    let bonus = req.body.bonus
+    let bonus_si = req.body.bonus_si
+    
+
+    let data = Product({
         typeId: typeId,
+        name: name,
         price: price,
-        sold_price: sold_price,
+        comission: comission,
+        size: size,
+        color: color,
+        max_discount_si: max_discount_si,
+        max_discount_le: max_discount_le,
         bonus: bonus,
-        is_active: true
+        bonus_si: bonus_si
     })
     Product.findOne({name: name}, function (err, product) {
         if (err) {
@@ -55,6 +67,37 @@ router.get('/listProduct', (req, res) => {
         })
 })
 
+router.post('/productByType', (req, res) => {
+    let type = req.body.typeId
+    let response = [];
+    Product.find({typeId: type})
+        .then(data => {
+            data.map(r => {
+                response.push({
+                    name: r.name,
+                    price: r.price,
+                    comission: r.comission,
+                    size: r.size,
+                    color: r.color,
+                    max_discount_si: r.max_discount_si,
+                    max_discount_le: r.max_discount_le,
+                    bonus: r.bonus,
+                    bonus_si: r.bonus_si
+                })
+            })
+            
+            return res.json({
+                data: response,
+                error: null
+            })
+        }).catch(err => {
+            return res.json({
+                data: null,
+                error: err
+            })
+        })
+})
+
 router.get('/:id', (req, res) => {
     Product.findOne({_id: req.params.id})
         .then(data => {
@@ -71,18 +114,32 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/:id/update', (req, res) => {
-    var name = req.body.name
-    var typeId = req.body.typeId
-    var price = req.body.price
-    var sold_price = req.body.sold_price
-    var bonus = req.body.bonus
+    let typeId = req.body.typeId
+
+    let name = req.body.name
+    let price = req.body.price
+    let comission = req.body.comission
+    let size = req.body.size
+    let color = req.body.color
+    let max_discount_si = req.body.max_discount_si
+    let max_discount_le = req.body.max_discount_le
+    let bonus = req.body.bonus
+    let bonus_si = req.body.bonus_si
+    
     Product.findOne({_id: req.params.id})
         .then(data => {
-            data.name = name
             data.typeId = typeId
+
+            data.name = name
             data.price = price
+            data.comission = comission
+            data.size = size
+            data.color = color
+            data.max_discount_si = max_discount_si
+            data.max_discount_le = max_discount_le
             data.bonus = bonus
-            data.sold_price = sold_price
+            data.bonus_si = bonus_si
+
             data.save(function (err) {
                 if (err) {
                     return res.json(responseError("Update error"))

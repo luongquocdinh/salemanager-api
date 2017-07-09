@@ -1,18 +1,17 @@
-var express = require('express')
-var path = require('path')
+let express = require('express')
+let path = require('path')
 
-var router = express.Router()
+let router = express.Router()
 
-var responseSuccess = require('./../helper/responseSuccess')
-var responseError = require('./../helper/responseError')
+let responseSuccess = require('./../helper/responseSuccess')
+let responseError = require('./../helper/responseError')
 
-var ProductType = require('./../models/productType')
+let ProductType = require('./../models/productType')
 
 router.post('/add', (req, res) => {
-    var name = req.body.name
-    var data = ProductType({
+    let name = req.body.name
+    let data = ProductType({
         name: name,
-        is_active: true
     })
 
     ProductType.findOne({name: name}, function (err, product) {
@@ -46,7 +45,7 @@ router.get('/listProductType', (req, res) => {
 })
 
 router.post('/:id/update', (req, res) => {
-    var name = req.body.name
+    let name = req.body.name
     ProductType.findOne({_id: req.params.id})
         .then(data => {
             data.name = name

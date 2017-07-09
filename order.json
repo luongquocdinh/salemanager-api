@@ -1,0 +1,52 @@
+{
+  "_id": "58b67759392ceb16ac004329",
+  "idCustomer":"58b67759392cseb16dec004329",
+  "idSale":1,
+  "status":2,   //['none','in_progress','win','lost']
+  "nextAction":3,
+  "note":[
+		{
+			"_id":"s4352323325",
+			"created_at":"2017-07-01 12:30:50",
+			"description":"đang bận"
+		},
+		{
+			"_id":"s4352323325",
+			"created_at":"2017-07-02 12:31:50",
+			"description":"đã bán"
+		}
+  ],
+  "details":   [
+		{ 
+			"_id": "58b67759392ceb16ac004239",
+			"idProduct": "58b67759392ceb16ac004329",
+			"price": 500000,
+			"quantity": 5,
+			"bonus":50000,
+			"total":2500000,
+			"is_enable":true,
+			"is_delete":false
+			},
+		{ 
+			"_id": "58b67759392ceb16ac004240",
+			"idProduct": "58b67759392ceb16ac004330",
+			"price": 500000,
+			"quantity": 1,
+			"bonus":3000,
+			"total":500000,
+			"is_enable":true,
+			"is_delete":false
+    }
+  ],
+  "is_check":true,
+  "is_enable": true,
+  "is_delete":false,
+  "created_at": "1/2/2017",
+  "updated_at": "2/3/2017"
+}
+//order.status là trạng thái đơn hàng, giá trị default là 0 (tương đương với việc sale mới add customer vào list customer by me chứ chưa giao dịch gì => order.details là
+// array rỗng)
+// order.nextAction là trạng thái kế tiếp => order.nextAction = order.status + 1
+//nếu đơn hàng có quantity<5 thì order.details.bonus = products.products.bonus * quantity
+//nếu đơn hàng có quantity>=5 thì order.details.bonus = products.products.bonus_si * quantity
+// is_check là giá trị kiểm tra đơn hàng đã tạo trên hệ thống khác chưa (1 hệ thống bán hàng khác của ông quân, cái này thằng sale tự check, rồi nhấn nút trả về true false nên yên tâm ^^)

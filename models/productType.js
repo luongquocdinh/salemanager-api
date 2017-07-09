@@ -3,7 +3,7 @@ var Schema = mongoose.Schema
 
 var productType = new Schema({
     'name': {type: String},
-    'is_active': {type: Boolean},
+    'is_active': {type: Boolean, default: true},
     "created_date": { type: Date, default: Date.now() },
     "updated_date"    : { type: Date, default: Date.now() }
 },

@@ -1,24 +1,28 @@
-var express = require('express')
-var path = require('path')
-var csv = require('fast-csv')
-var formidable = require('formidable')
-var fs = require('fs')
+let express = require('express')
+let path = require('path')
+let csv = require('fast-csv')
+let formidable = require('formidable')
+let fs = require('fs')
 
-var router = express.Router()
+let router = express.Router()
 
-var responseSuccess = require('./../helper/responseSuccess')
-var responseError = require('./../helper/responseError')
+let responseSuccess = require('./../helper/responseSuccess')
+let responseError = require('./../helper/responseError')
 
-var Customer = require('./../models/customer')
-var saleStatus = require('./../models/saleStatus')
-var statusCall = require('./../models/statusCall')
+let Customer = require('./../models/customer')
+let saleStatus = require('./../models/saleStatus')
+let statusCall = require('./../models/statusCall')
 
 router.post('/add', (req, res) =>{
-    var name = req.body.name
-    var phone = req.body.phone
-    var data = Customer({
+    let name = req.body.name
+    let phone = req.body.phone
+    let mail = req.body.mail
+    let address = req.body.address
+    let data = Customer({
         name: name,
-        phone: phone
+        phone: phone,
+        mail: mail,
+        address: address
     })
     Customer.findOne({phone: phone}, function (err, customer) {
         if (err) {
@@ -72,8 +76,8 @@ router.get('/listNotSale', (req, res) => {
 })
 
 router.post('/assignSale', (req, res) => {
-    var customerId = req.body.customerId
-    var saleId = req.body.saleId
+    let customerId = req.body.customerId
+    let saleId = req.body.saleId
 
     Customer.findOne({_id: customerId})
         .then(customer => {

@@ -2,12 +2,20 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var product = new Schema({
-    'name': {type: String},
     'typeId': {type: String},
+
+    'name': {type: String},
     'price': {type: Number},
-    'sold_price': {type: String},
-    'bonus': {type: Number},
-    'is_active': {type: Boolean},
+    'comission': {type: Number},
+    "size": {type: String},
+    "color": {type: String},
+    "max_discount_si": {type: Number},
+    "max_discount_le": {type: Number},
+    "bonus": {type: Number},
+    "bonus_si": {type: Number},
+    "is_enable": {type: Boolean, default: true},
+    "is_delete": {type: Boolean, default: false},
+
     "created_date": { type: Date, default: Date.now() },
     "updated_date"    : { type: Date, default: Date.now() }
 },

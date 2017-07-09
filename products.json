@@ -1,0 +1,31 @@
+{
+  "_id": "58b67759392ceb16ac004329",
+  "name": "Áo thun",
+  "products": [
+    { 
+			"_id": "58b67759392ceb16ac004329",
+			"name": "Áo cổ tim",
+			"price": "500000",
+			"comission": "5000",
+			"size":"L",
+			"color":"white",
+			"max_discount_si":"350000",
+			"max_discount_le":"450000",
+			"bonus":"5000",
+			"bonus_si":"3500",
+			"is_enable":true,
+			"is_delete":false
+    }
+  ],
+  "is_enable": true,
+  "is_delete":false,
+  "created_at": "1/2/2017",
+  "updated_at": "2/3/2017"
+}
+//products.name là product_type name
+//products.products là danh sách cái product có trong product_type
+//products.products.price là giá chuẩn
+//products.products.max_discount_le là giá thấp nhất được phép bán cho khách hàng mua lẻ
+//products.products.max_discount_si là giá thấp nhất được phép bán cho khách hàng mua sỉ
+//products.products.bonus là bonus áp dụng cho khách hàng mua lẻ
+//products.products.bonus_si là bonus áp dụng cho khách hàng mua sỉ

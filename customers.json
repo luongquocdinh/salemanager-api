@@ -1,0 +1,11 @@
+{
+  "_id": "58b67759392ceb16ac004329",
+  "name": "Lê Phước Minh",
+  "phone":"0123456789",
+  "mail":"minh@gmail.com",
+  "address":"ho chi minh",
+  "is_enable": true,
+  "is_delete":false,
+  "created_at": "1/2/2017",
+  "updated_at": "2/3/2017"
+}
