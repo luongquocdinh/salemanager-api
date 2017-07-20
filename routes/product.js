@@ -160,7 +160,7 @@ router.post('/:id/update', (req, res) => {
 router.post('/:id/delete', (req, res) => {
     Product.findOne({_id: req.params.id})
         .then(data => {
-            data.is_active = !data.is_active
+            data.is_delete = !data.is_delete
             data.save(function(err) {
                 if (err) {
                     return res.json(responseError("Delete error"))

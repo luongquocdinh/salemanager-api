@@ -21,10 +21,11 @@ router.post('/getList', (req, res) => {
     let result = []
     Order.find({idSale: idSale})
         .then(data => {
+
             let ids = []
             data.map(id => {
                 ids.push(id.idCustomer);
-            })
+            });
 
             Customer.find({
                 _id: {
@@ -104,7 +105,7 @@ router.post('/:id/update', (req, res) => {
     let status = req.body.status
     Order.findOne({_id: req.params.id})
         .then(data => {
-            data.status = status
+            data.status = parseInt(status)
             data.callDate.push(Date.now())
             data.save(function (err) {
                 if (err) {
