@@ -20,6 +20,7 @@ router.post('/getList', (req, res) => {
     let idSale = req.body.idSale
     Order.find({idSale: idSale})
         .then(data => {
+			
             return res.json({
                 data: data,
                 error: null
