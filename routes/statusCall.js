@@ -18,13 +18,43 @@ let Order = require('./../models/order')
 
 router.post('/getList', (req, res) => {
     let idSale = req.body.idSale
+    let result = []
     Order.find({idSale: idSale})
         .then(data => {
-            return res.json({
-                data: data,
-                error: null
+            let ids = []
+            data.map(id => {
+                ids.push(id.idCustomer);
             })
-        }).catch(err => {
+
+            Customer.find({
+                _id: {
+                    $in: ids
+                }
+            }).then(cus => {
+                let users = {}
+                cus.map(u => {
+                    users[u._id] = u
+                })
+
+                result = data.map(info => {
+                    return {
+                        idCustomer: info.idCustomer,
+                        name: users[info.idCustomer].name,
+                        phone: users[info.idCustomer].phone,
+                        status: info.status,
+                        nextAction: info.nextAction,
+                        details: info.details,
+                        note: info.note
+                    }
+                })
+
+                return res.json({
+                    data: result,
+                    error: null
+                })
+            })
+        })
+        .catch(err => {
             return res.json({
                 data: null,
                 error: err
