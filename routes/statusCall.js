@@ -1,24 +1,24 @@
-var express = require('express')
-var path = require('path')
-var csv = require('fast-csv')
-var formidable = require('formidable')
-var fs = require('fs')
+let express = require('express')
+let path = require('path')
+let csv = require('fast-csv')
+let formidable = require('formidable')
+let fs = require('fs')
 
-var crypto = require('crypto')
-var randomString = require('randomstring')
+let crypto = require('crypto')
+let randomString = require('randomstring')
 
-var router = express.Router()
+let router = express.Router()
 
-var responseSuccess = require('./../helper/responseSuccess')
-var responseError = require('./../helper/responseError')
+let responseSuccess = require('./../helper/responseSuccess')
+let responseError = require('./../helper/responseError')
 
-var Sale = require('./../models/sale')
-var Customer = require('./../models/customer')
-var statusCall = require('./../models/statusCall')
+let Sale = require('./../models/sale')
+let Customer = require('./../models/customer')
+let Order = require('./../models/order')
 
 router.post('/getList', (req, res) => {
-    var saleId = req.body.saleId
-    statusCall.find({saleId: saleId})
+    let idSale = req.body.idSale
+    Order.find({idSale: idSale})
         .then(data => {
             return res.json({
                 data: data,
@@ -33,8 +33,8 @@ router.post('/getList', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    var id = req.params.id
-    statusCall.findOne({_id: id})
+    let id = req.params.id
+    Order.findOne({_id: id})
         .then(data => {
             return res.json({
                 data: data,
@@ -49,15 +49,15 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/add', (req, res) => {
-    var data = statusCall({
-        saleId: req.body.saleId,
-        customerId: req.body.customerId,
-        countCall: 1,
-        callDate: [Date.now()],
-        isWin: req.body.isWin,
-        status: req.body.status,
+    let data = Order({
+        "idSale": req.body.idSale,
+        "idCustomer": req.body.idCustomer,
+        "status": req.body.status,
+        "nextAction": req.body.nextAction,
+        "note": req.body.note,
+        "details": req.body.details,
+        "is_check": req.body.is_check
     })
-
 
     data.save(function (err) {
         if (err) {
@@ -71,8 +71,8 @@ router.post('/add', (req, res) => {
 })
 
 router.post('/:id/update', (req, res) => {
-    var status = req.body.status
-    statusCall.findOne({_id: req.params.id})
+    let status = req.body.status
+    Order.findOne({_id: req.params.id})
         .then(data => {
             data.status = status
             data.callDate.push(Date.now())
