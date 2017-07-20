@@ -43,19 +43,23 @@ router.post('/edit', (req, res) => {
     let id = req.body.id
     Customer.findOne({_id: id})
         .then(user => {
-            user.name = req.body.name
-            user.phone = req.body.phone
-            user.mail = req.body.mail
-            user.address = req.body.address
-            user.save(function (err) {
+            let data = {
+                name: req.body.name || user.name,
+                mail: req.body.mail || user.mail,
+                phone: req.body.phone || user.phone,
+                address: req.body.address || user.address
+            }
+            Customer.findOneAndUpdate({_id: id}, data, {new: true}, (err, customer) => {
                 if (err) {
                     return res.json(responseError("Update Customer feilds"))
                 }
+
                 return res.json({
-                    data: user,
+                    data: customer,
                     error: null
                 })
             })
+            
         }).catch(err => {
             return res.json({
                 data: null,
