@@ -17,7 +17,7 @@ var Customer = require('./../models/customer')
 var Product = require('./../models/product')
 var ProductBySale = require('./../models/productBySale')
 var saleStatus = require('./../models/saleStatus')
-
+let Order = require('./../models/order')
 router.post('/add', (req, res) => {
     var name = req.body.name
     var password = req.body.password
@@ -69,7 +69,7 @@ router.get('/listSale', (req, res) => {
 
 router.get('/:id/listCustomer', (req, res) => {
     let id = req.params.id
-    Customer.find({saleId: id})
+    Order.find({idSale: id})
         .then(data => {
             return res.json({
                 data: data,
