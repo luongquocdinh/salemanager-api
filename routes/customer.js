@@ -45,7 +45,7 @@ router.post('/edit', (req, res) => {
         .then(user => {
             let data = {
                 name: req.body.name || user.name,
-                mail: req.body.mail || user.mail,
+                email: req.body.email || user.email,
                 phone: req.body.phone || user.phone,
                 address: req.body.address || user.address
             }
@@ -60,6 +60,30 @@ router.post('/edit', (req, res) => {
                 })
             })
             
+        }).catch(err => {
+            return res.json({
+                data: null,
+                error: err
+            })
+        })
+})
+
+router.post('/detail', (req, res) => {
+    let id = req.body.id;
+    Customer.findOne({_id: id})
+        .then(user => {
+            let customer = {
+                id: id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                address: user.address
+            }
+
+            return res.json({
+                data: customer,
+                error: null
+            })
         }).catch(err => {
             return res.json({
                 data: null,
