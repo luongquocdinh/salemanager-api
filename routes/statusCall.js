@@ -49,7 +49,8 @@ router.post('/getList', (req, res) => {
                         status: info.status,
                         nextAction: info.nextAction,
                         details: info.details,
-                        note: info.note
+                        note: info.note,
+						is_check: info.is_check
                     }
                 })
 
