@@ -68,6 +68,29 @@ router.post('/edit', (req, res) => {
         })
 })
 
+router.post('/detail', (req, res) => {
+    let id = req.body.id;
+    Customer.findOne({_id: id})
+        .then(user => {
+            let customer = {
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                address: user.address
+            }
+
+            return res.json({
+                data: customer,
+                error: null
+            })
+        }).catch(err => {
+            return res.json({
+                data: null,
+                error: err
+            })
+        })
+})
+
 router.get('/listCustomer', (req, res) => {
     Customer.find({})
         .lean()

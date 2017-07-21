@@ -43,6 +43,8 @@ router.post('/getList', (req, res) => {
                         idCustomer: info.idCustomer,
                         name: users[info.idCustomer].name,
                         phone: users[info.idCustomer].phone,
+                        email: users[info.idCustomer].email,
+                        address: users[info.idCustomer].address,
                         status: info.status,
                         nextAction: info.nextAction,
                         details: info.details,
