@@ -4,7 +4,7 @@ var Schema = mongoose.Schema
 var customer = new Schema({
     'name': {type: String},
     'phone': {type: String},
-    'mail': {type: String},
+    'email': {type: String},
     'address': {type: String},
 
     'is_sale': {type: Boolean, default: false},
