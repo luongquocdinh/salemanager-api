@@ -15,6 +15,7 @@ let responseError = require('./../helper/responseError')
 let Sale = require('./../models/sale')
 let Customer = require('./../models/customer')
 let Order = require('./../models/order')
+let Product = require('./../models/product')
 
 router.post('/getList', (req, res) => {
     let idSale = req.body.idSale
@@ -101,18 +102,25 @@ router.post('/add', (req, res) => {
     })
 })
 
-router.post('/:id/update', (req, res) => {
+router.post('/update', (req, res) => {
     let status = req.body.status
-    Order.findOne({_id: req.params.id})
-        .then(data => {
-            data.status = parseInt(status)
-            data.callDate.push(Date.now())
-            data.save(function (err) {
+    let id = req.body.id
+    Order.findOne({_id: id})
+        .then(customer => {
+            let data = {
+                "status": req.body.status || customer.status,
+                "nextAction": req.body.nextAction || customer.nextAction,
+                "note": req.body.note || customer.note,
+                "details": req.body.details || customer.details,
+                "is_check": req.body.is_check|| customer.is_check
+            }
+            Order.findOneAndUpdate({_id: id}, data, {new: true}, (err, order) => {
                 if (err) {
-                    return res.json(responseError("Update status Call feilds"))
+                    return res.json(responseError("Update Order feilds"))
                 }
+
                 return res.json({
-                    data: data,
+                    data: order,
                     error: null
                 })
             })
@@ -122,6 +130,62 @@ router.post('/:id/update', (req, res) => {
                 error: err
             })
         })
+})
+
+router.post('/sum', (req, res) => {
+    let idSale = req.body.idSale
+    let sum = []
+    Order.aggregate([
+        { "$match": { "idSale": idSale } },
+        { "$unwind": "$details" },
+        {
+            "$group": {
+                "_id": "$details.idProduct",
+                "sold_price": { "$sum": "$details.price" },
+                "quantity": { "$sum": "$details.quantity" },
+                "bonus": { "$sum": "$details.bonus" }
+            }
+        }
+    ], (err, result) => {
+        if (err) {
+            return res.json({
+                data: null,
+                error: err
+            });
+        }
+        let ids = []
+        result.map(r => {
+            ids.push(r._id)
+        })
+
+        Product.find({
+            _id: {
+                $in: ids
+            }
+        }).then(p => {
+            let product = {}
+            p.map(u => {
+                product[u._id] = u
+            })
+
+            sum = result.map(info => {
+                return {
+                    name: product[info._id].name,
+                    price: product[info._id].price,
+                    sold_price: info.sold_price,
+                    quantity: info.quantity,
+                    comission: product[info._id].comission,
+                    bonus: info.bonus,
+                    total: info.quantity * info.sold_price
+                }
+            })
+
+            return res.json({
+                data: sum,
+                error: null
+            })
+        })
+    })
 })
 
 module.exports = router
