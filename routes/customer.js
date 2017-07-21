@@ -73,6 +73,7 @@ router.post('/detail', (req, res) => {
     Customer.findOne({_id: id})
         .then(user => {
             let customer = {
+                id: id,
                 name: user.name,
                 email: user.email,
                 phone: user.phone,
