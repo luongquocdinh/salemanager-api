@@ -44,10 +44,10 @@ router.post('/edit', (req, res) => {
     Customer.findOne({_id: id})
         .then(user => {
             let data = {
-                name: req.body.name || user.name,
-                email: req.body.email || user.email,
-                phone: req.body.phone || user.phone,
-                address: req.body.address || user.address
+                name: req.body.name || "",
+                email: req.body.email || "",
+                phone: req.body.phone || "",
+                address: req.body.address || ""
             }
             Customer.findOneAndUpdate({_id: id}, data, {new: true}, (err, customer) => {
                 if (err) {
