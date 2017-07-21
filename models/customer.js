@@ -7,15 +7,6 @@ var customer = new Schema({
     'email': {type: String},
     'address': {type: String},
 
-    'is_sale': {type: Boolean, default: false},
-    'saleId': {type: Number, default: null},
-    'listProduct': [{
-        'productId': {type: String},
-        'name': {type: String},
-        'price': {type: String},
-        'bonus': {type: String}
-    }],
-
     "is_enable": {type: Boolean, default: true},
     "is_delete": {type: Boolean, default: false},
 
