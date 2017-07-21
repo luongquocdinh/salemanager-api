@@ -16,12 +16,12 @@ let statusCall = require('./../models/statusCall')
 router.post('/add', (req, res) =>{
     let name = req.body.name
     let phone = req.body.phone
-    let mail = req.body.mail
+    let email = req.body.email
     let address = req.body.address
     let data = Customer({
         name: name,
         phone: phone,
-        mail: mail,
+        email: email,
         address: address
     })
     Customer.findOne({phone: phone}, function (err, customer) {
