@@ -40,6 +40,7 @@ router.post('/getList', (req, res) => {
 
                 result = data.map(info => {
                     return {
+                        id: info._id,
                         idCustomer: info.idCustomer,
                         name: users[info.idCustomer].name,
                         phone: users[info.idCustomer].phone,
