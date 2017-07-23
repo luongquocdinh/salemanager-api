@@ -136,7 +136,7 @@ router.post('/:id/update', (req, res) => {
     
     Product.findOne({_id: req.params.id})
         .then(data => {
-            let data = {
+            let p = {
                 name: name || data.name,
                 price: price || data.price,
                 price_lower: price_lower || data.price_lower,
@@ -150,13 +150,13 @@ router.post('/:id/update', (req, res) => {
                 bonus_coefficient: bonus_coefficient || data.bonus_coefficient
             }
 
-            Product.findOneAndUpdate({_id: req.params.id}, data, {new: true}, (err, order) => {
+            Product.findOneAndUpdate({_id: req.params.id}, p, {new: true}, (err, product) => {
                 if (err) {
                     return res.json(responseError("Update Product feilds"))
                 }
 
                 return res.json({
-                    data: order,
+                    data: product,
                     error: null
                 })
             })
