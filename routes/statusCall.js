@@ -23,7 +23,8 @@ router.post('/getList', (req, res) => {
     Order.find({idSale: idSale})
         .then(data => {
 
-            let ids = []
+            let ids = [];
+
             data.map(id => {
                 ids.push(id.idCustomer);
             });
