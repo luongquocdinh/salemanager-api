@@ -13,6 +13,7 @@ router.post('/add', (req, res) =>{
 
     let name = req.body.name
     let price = req.body.price
+    let price_lower = req.body.price_lower
     let comission = req.body.comission
     let size = req.body.size
     let color = req.body.color
@@ -20,19 +21,22 @@ router.post('/add', (req, res) =>{
     let max_discount_le = req.body.max_discount_le
     let bonus = req.body.bonus
     let bonus_si = req.body.bonus_si
+    let bonus_coefficient = req.body.bonus_coefficient
     
 
     let data = Product({
         typeId: typeId,
         name: name,
         price: price,
+        price_lower: price_lower,
         comission: comission,
         size: size,
         color: color,
         max_discount_si: max_discount_si,
         max_discount_le: max_discount_le,
         bonus: bonus,
-        bonus_si: bonus_si
+        bonus_si: bonus_si,
+        bonus_coefficient: bonus_coefficient
     })
     Product.findOne({name: name}, function (err, product) {
         if (err) {
@@ -50,7 +54,7 @@ router.post('/add', (req, res) =>{
 })
 
 router.get('/listProduct', (req, res) => {
-    Product.find({})
+    Product.find({is_enable: true})
         .lean()
         .exec()
         .then(data => {
@@ -76,13 +80,15 @@ router.post('/productByType', (req, res) => {
                 response.push({
                     name: r.name,
                     price: r.price,
+                    price_lower: price_lower,
                     comission: r.comission,
                     size: r.size,
                     color: r.color,
                     max_discount_si: r.max_discount_si,
                     max_discount_le: r.max_discount_le,
                     bonus: r.bonus,
-                    bonus_si: r.bonus_si
+                    bonus_si: r.bonus_si,
+                    bonus_coefficient: bonus_coefficient
                 })
             })
             
@@ -118,6 +124,7 @@ router.post('/:id/update', (req, res) => {
 
     let name = req.body.name
     let price = req.body.price
+    let price_lower = req.body.price_lower
     let comission = req.body.comission
     let size = req.body.size
     let color = req.body.color
@@ -125,27 +132,31 @@ router.post('/:id/update', (req, res) => {
     let max_discount_le = req.body.max_discount_le
     let bonus = req.body.bonus
     let bonus_si = req.body.bonus_si
+    let bonus_coefficient = req.body.bonus_coefficient
     
     Product.findOne({_id: req.params.id})
         .then(data => {
-            data.typeId = typeId
+            let data = {
+                name: name || data.name,
+                price: price || data.price,
+                price_lower: price_lower || data.price_lower,
+                comission: comission || data.comission,
+                size: size || data.size,
+                color: color || data.color,
+                max_discount_si: max_discount_si || data.max_discount_si,
+                max_discount_le: max_discount_le || data.max_discount_le,
+                bonus: bonus || data.bonus,
+                bonus_si: bonus_si || data.bonus_si,
+                bonus_coefficient: bonus_coefficient || data.bonus_coefficient
+            }
 
-            data.name = name
-            data.price = price
-            data.comission = comission
-            data.size = size
-            data.color = color
-            data.max_discount_si = max_discount_si
-            data.max_discount_le = max_discount_le
-            data.bonus = bonus
-            data.bonus_si = bonus_si
-
-            data.save(function (err) {
+            Product.findOneAndUpdate({_id: req.params.id}, data, {new: true}, (err, order) => {
                 if (err) {
-                    return res.json(responseError("Update error"))
+                    return res.json(responseError("Update Product feilds"))
                 }
+
                 return res.json({
-                    data: data,
+                    data: order,
                     error: null
                 })
             })

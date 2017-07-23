@@ -6,6 +6,7 @@ var product = new Schema({
 
     'name': {type: String},
     'price': {type: Number},
+    'price_lower': {type: Number},
     'comission': {type: Number},
     "size": {type: String},
     "color": {type: String},
@@ -13,6 +14,8 @@ var product = new Schema({
     "max_discount_le": {type: Number},
     "bonus": {type: Number},
     "bonus_si": {type: Number},
+    "bonus_coefficient": {type: Number},
+    
     "is_enable": {type: Boolean, default: true},
     "is_delete": {type: Boolean, default: false},
 
