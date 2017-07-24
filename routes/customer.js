@@ -93,7 +93,7 @@ router.post('/detail', (req, res) => {
 })
 
 router.get('/listCustomer', (req, res) => {
-    Customer.find({})
+    Customer.find({is_enable: true})
         .lean()
         .exec()
         .then(data => {

@@ -21,7 +21,7 @@ let order = new Schema({
 			"total": {type: Number},
 			"is_enable": {type: Boolean, default: true},
             "is_delete": {type: Boolean, default: false},
-            "created_date": { type: Date, default: Date.now() },
+            "date": {type: Number},
             "updated_date"    : { type: Date, default: Date.now() }
         }
     ],

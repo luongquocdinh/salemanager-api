@@ -7,7 +7,7 @@
     "commercial": "index.js"
   },
   "scripts": {
-    "start": "nodemon bin/index.js"
+    "start": "node bin/index.js"
   },
   "author": "",
   "license": "ISC",
