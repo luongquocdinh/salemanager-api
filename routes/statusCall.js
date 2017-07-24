@@ -39,7 +39,13 @@ router.post('/getList', (req, res) => {
                 })
 
                 result = data.map(info => {
-                    return {
+					Promise.all(info.details.map(detail){
+						return Product.find({_id:detail.idProduct})
+							.then(r=>{
+								detail.nameProduct = r.name
+							})
+					}).then(()=>{
+						return {
                         id: info._id,
                         idCustomer: info.idCustomer,
                         name: users[info.idCustomer].name,
@@ -52,6 +58,10 @@ router.post('/getList', (req, res) => {
                         note: info.note,
 						is_check: info.is_check
                     }
+					})
+						
+					
+                   
                 })
 
                 return res.json({
