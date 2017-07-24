@@ -6,7 +6,7 @@ var product = new Schema({
 
     'name': {type: String},
     'price': {type: Number},
-    'price_lower': {type: Number},
+    'price_sold': {type: Number},
     'commission': {type: Number},
     "size": {type: String},
     "color": {type: String},
