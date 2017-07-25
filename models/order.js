@@ -2,8 +2,8 @@ let mongoose = require('mongoose')
 let Schema = mongoose.Schema
 
 let order = new Schema({
-    "idSale": {type: Number},
-    "idCustomer": {type: String},
+    "idSale": {type: Number, index: true},
+    "idCustomer": {type: String, index: true},
     "status": {type: Number},
     "nextAction": {type: Number},
     "note": [
@@ -14,7 +14,7 @@ let order = new Schema({
     ],
     "details": [
         {
-            "idProduct": {type: String},
+            "idProduct": {type: String, index: true},
 			"price": {type: Number},
 			"quantity": {type: Number},
 			"bonus": {type: Number},
