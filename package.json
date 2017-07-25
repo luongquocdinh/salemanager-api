@@ -25,6 +25,7 @@
     "nodemon": "^1.11.0",
     "optimist": "^0.6.1",
     "path": "^0.12.7",
-    "randomstring": "^1.1.5"
+    "randomstring": "^1.1.5",
+    "underscore": "^1.8.3"
   }
 }

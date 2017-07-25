@@ -3,6 +3,8 @@ let path = require('path')
 let csv = require('fast-csv')
 let formidable = require('formidable')
 let fs = require('fs')
+let Promise = require('bluebird')
+let _ = require('underscore');
 
 let crypto = require('crypto')
 let randomString = require('randomstring')
@@ -19,64 +21,114 @@ let Product = require('./../models/product')
 
 router.post('/getList', (req, res) => {
     let idSale = req.body.idSale
-    let result = []
-    Order.find({idSale: idSale})
-        .then(data => {
+    let response = []
+    Order.aggregate([
+        { "$match": { "idSale": idSale } },
+        { "$unwind": "$details" },
+    ], (err, orders) => {
+        let ids_product = []
+        let ids_customer = []
 
-            let ids = [];
+        orders.map(p => {
+            ids_product.push(p.details.idProduct)
+            ids_customer.push(p.idCustomer)
 
-            data.map(id => {
-                ids.push(id.idCustomer);
-            });
+        })
 
+        Product.find({
+            _id: {
+                $in: ids_product
+            }
+        }).then(r => {
+            let product = {}
+            r.map(value => {
+                product[value._id] = value
+            })
+
+            response = orders.map(p => {
+                p.details.name = product[p.details.idProduct].name
+                return {
+                    _id: p._id,
+                    idCustomer: p.idCustomer,
+                    idSale: p.idSale,
+                    status: p.status,
+                    nextAction: p.nextAction,
+                    is_check: p.is_check,
+                    is_enable: p.is_enable,
+                    is_delete: p.is_delete,
+                    details: p.details,
+                    note: p.note
+                }
+            })
+            
             Customer.find({
                 _id: {
-                    $in: ids
+                    $in: ids_customer
                 }
-            }).then(cus => {
-                let users = {}
-                cus.map(u => {
-                    users[u._id] = u
+            }).then(u => {
+                let customers = {}
+                u.map(user => {
+                    customers[user._id] = user
                 })
 
-                result = data.map(info => {
-					Promise.all(info.details.map(detail){
-						return Product.find({_id:detail.idProduct})
-							.then(r=>{
-								detail.nameProduct = r.name
-							})
-					}).then(()=>{
-						return {
-                        id: info._id,
-                        idCustomer: info.idCustomer,
-                        name: users[info.idCustomer].name,
-                        phone: users[info.idCustomer].phone,
-                        email: users[info.idCustomer].email,
-                        address: users[info.idCustomer].address,
-                        status: info.status,
-                        nextAction: info.nextAction,
-                        details: info.details,
-                        note: info.note,
-						is_check: info.is_check
+                response = response.map(r => {
+                    r.name = customers[r.idCustomer].name
+                    r.email = customers[r.idCustomer].email
+                    r.phone = customers[r.idCustomer].phone
+                    r.address = customers[r.idCustomer].address
+                    return {
+                        _id: r._id,
+                        idCustomer: r.idCustomer,
+                        name: r.name,
+                        email: r.email,
+                        phone: r.phone,
+                        address: r.address,
+                        idSale: r.idSale,
+                        status: r.status,
+                        nextAction: r.nextAction,
+                        is_check: r.is_check,
+                        is_enable: r.is_enable,
+                        is_delete: r.is_delete,
+                        details: r.details,
+                        note: r.note
                     }
-					})
-						
-					
-                   
                 })
 
-                return res.json({
-                    data: result,
-                    error: null
+                let groups = _.groupBy(response, (value) => {
+                    return value._id + '#' + value.idCustomer + '#'
+                        + value.idSale + '#' + value.name + '#'
+                        + value.email + '#' + value.phone + '#'
+                        + value.address + '#' + value.status + '#'
+                        + value.nextAction + '#' + value.is_check + '#'
+                        + value.is_delete + '#' + value.is_enable + '#'
+                        + value.note
                 })
+                
+                let output = _.map(groups, (group) => {
+                    return {
+                        _id: group[0]._id,
+                        idCustomer: group[0].idCustomer,
+                        idSale: group[0].idSale,
+                        name: group[0].name,
+                        email: group[0].email,
+                        phone: group[0].phone,
+                        address: group[0].address,
+                        status: group[0].status,
+                        nextAction: group[0].nextAction,
+                        is_check: group[0].is_check,
+                        is_delete: group[0].is_delete,
+                        is_enable: group[0].is_enable,
+                        details: _.pluck(group, 'details'),
+                        note: group[0].note
+                    }
+                })
+                return res.json({
+                    data: output,
+                    error: null
+                })            
             })
         })
-        .catch(err => {
-            return res.json({
-                data: null,
-                error: err
-            })
-        })
+    })
 })
 
 router.get('/:id', (req, res) => {
