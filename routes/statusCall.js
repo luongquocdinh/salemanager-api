@@ -6,9 +6,6 @@ let fs = require('fs')
 let Promise = require('bluebird')
 let _ = require('underscore');
 
-let crypto = require('crypto')
-let randomString = require('randomstring')
-
 let router = express.Router()
 
 let responseSuccess = require('./../helper/responseSuccess')
