@@ -170,23 +170,23 @@ router.post('/add', (req, res) => {
 })
 
 router.post('/update', (req, res) => {
-    let status = req.body.status
     let id = req.body.id
     Order.findOne({_id: id})
         .then(customer => {
             let data = {
-                "status": req.body.status || customer.status,
-                "nextAction": req.body.nextAction || customer.nextAction,
-                "note": req.body.note || customer.note,
-                "details": req.body.details || customer.details,
-                "is_check": req.body.is_check|| customer.is_check
+                status: (req.body.status) ? req.body.status : customer.status,
+                nextAction: (req.body.nextAction) ? req.body.nextAction : customer.nextAction,
+                note: (req.body.note) ? req.body.note :  customer.note,
+                details: (req.body.details) ? req.body.details : customer.details,
+                is_check: req.body.is_check // (req.body.is_check) ? req.body.is_check : customer.is_check
             }
+            
             Order.findOneAndUpdate({_id: id}, data, {new: true}, (err, order) => {
                 if (err) {
                     return res.json(responseError("Update Order feilds"))
                 }
-
                 return res.json({
+
                     data: order,
                     error: null
                 })
