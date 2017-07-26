@@ -13,7 +13,6 @@ router.post('/add', (req, res) =>{
 
     let name = req.body.name
     let price = req.body.price
-    let commission = req.body.commission
     let price_sold = req.body.price_sold
     let size = req.body.size
     let color = req.body.color
@@ -28,7 +27,6 @@ router.post('/add', (req, res) =>{
         typeId: typeId,
         name: name,
         price: price,
-        commission: commission,
         price_sold: price_sold,
         size: size,
         color: color,
