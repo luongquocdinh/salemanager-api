@@ -52,7 +52,7 @@ router.post('/add', (req, res) =>{
 })
 
 router.get('/listProduct', (req, res) => {
-    Product.find({is_delete: true})
+    Product.find({is_delete: false})
         .lean()
         .exec()
         .then(data => {
