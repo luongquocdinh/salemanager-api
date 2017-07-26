@@ -122,8 +122,7 @@ router.post('/:id/update', (req, res) => {
 
     let name = req.body.name
     let price = req.body.price
-    let price_lower = req.body.price_lower
-    let comission = req.body.comission
+    let price_sold = req.body.price_sold
     let size = req.body.size
     let color = req.body.color
     let max_discount_si = req.body.max_discount_si
@@ -137,8 +136,7 @@ router.post('/:id/update', (req, res) => {
             let p = {
                 name: name || data.name,
                 price: price || data.price,
-                price_lower: price_lower || data.price_lower,
-                comission: comission || data.comission,
+                price_sold: price_sold || data.price_sold,
                 size: size || data.size,
                 color: color || data.color,
                 max_discount_si: max_discount_si || data.max_discount_si,
@@ -169,7 +167,7 @@ router.post('/:id/update', (req, res) => {
 router.post('/:id/delete', (req, res) => {
     Product.findOne({_id: req.params.id})
         .then(data => {
-            data.is_delete = !data.is_delete
+            data.is_enable = !data.is_enable
             data.save(function(err) {
                 if (err) {
                     return res.json(responseError("Delete error"))
