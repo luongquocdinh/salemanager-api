@@ -25,3 +25,6 @@ if (require.main === module) {
   exports.shutdown = shutdown
   exports.port = app.get('port')
 }
+
+
+// echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p

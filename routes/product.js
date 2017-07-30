@@ -71,6 +71,26 @@ router.get('/listProduct', (req, res) => {
         })
 })
 
+router.post('/findIds', (req, res) => {
+    let ids = req.body.ids;
+
+    Product.find({
+        _id: {
+            $in: ids
+        }
+    }).then(product => {
+        return res.json({
+            data: product,
+            error: null
+        })
+    }).catch(err => {
+         return res.json({
+             data: null,
+             error: err
+         });
+    })
+});
+
 router.post('/productByType', (req, res) => {
     let type = req.body.typeId
     let response = [];
