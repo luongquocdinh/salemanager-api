@@ -16,7 +16,8 @@ let order = new Schema({
         {
             "idProduct": {type: String, index: true},
 			"price": {type: Number},
-			"quantity": {type: Number},
+            "quantity": {type: Number},
+            "type": {type: Number},
 			"bonus": {type: Number},
 			"total": {type: Number},
 			"is_enable": {type: Boolean, default: true},
