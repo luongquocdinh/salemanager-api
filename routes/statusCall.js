@@ -146,6 +146,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/add', (req, res) => {
     let data = Order({
+        "date": req.body.date,
         "idSale": req.body.idSale,
         "idCustomer": req.body.idCustomer,
         "status": req.body.status,

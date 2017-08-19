@@ -4,6 +4,7 @@ let Schema = mongoose.Schema
 let order = new Schema({
     "idSale": {type: Number, index: true},
     "idCustomer": {type: String, index: true},
+    "date": {type: Date()},
     "status": {type: Number},
     "nextAction": {type: Number},
     "note": [
