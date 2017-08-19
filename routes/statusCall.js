@@ -46,6 +46,7 @@ router.post('/getList', (req, res) => {
                 p.details.name = product[p.details.idProduct].name
                 return {
                     _id: p._id,
+                    date: p.date,
                     idCustomer: p.idCustomer,
                     idSale: p.idSale,
                     status: p.status,
@@ -76,6 +77,7 @@ router.post('/getList', (req, res) => {
                     return {
                         _id: r._id,
                         idCustomer: r.idCustomer,
+                        date: r.date,
                         name: r.name,
                         email: r.email,
                         phone: r.phone,
@@ -98,12 +100,13 @@ router.post('/getList', (req, res) => {
                         + value.address + '#' + value.status + '#'
                         + value.nextAction + '#' + value.is_check + '#'
                         + value.is_delete + '#' + value.is_enable + '#'
-                        + value.note
+                        + value.noteb + '#' + value.date
                 })
                 
                 let output = _.map(groups, (group) => {
                     return {
                         _id: group[0]._id,
+                        date: group[0].date,
                         idCustomer: group[0].idCustomer,
                         idSale: group[0].idSale,
                         name: group[0].name,
