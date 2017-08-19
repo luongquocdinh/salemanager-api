@@ -135,10 +135,57 @@ router.get('/:id', (req, res) => {
     let id = req.params.id
     Order.findOne({_id: id})
         .then(data => {
-            return res.json({
-                data: data,
-                error: null
+            let ids = []
+
+            data.details.map(p => {
+                ids.push(p.idProduct)
             })
+
+            Customer.findOne({_id: data.idCustomer})
+                .then(cus => {
+                    let response = {
+                        name: cus.name,
+                        email: cus.email,
+                        phone: cus.phone,
+                        address: cus.address,
+                        idSale: data.idSale,
+                        date: data.date,
+                        idCustomer: data.idCustomer,
+                        status: data.status,
+                        nextAction: data.nextAction,
+                        is_enable: data.is_enable,
+                        is_delete: data.is_delete,
+                        details: data.details,
+                        note: data.note
+                    }
+                    Product.find({
+                        _id: {
+                            $in: ids
+                        }
+                    }).then(product => {
+                        let list_product = {}
+                        product.map(value => {
+                            list_product[value._id] = value
+                        })
+                        response.details = response.details.map(p => {
+                            p.name = list_product[p.idProduct].name
+                            return {
+                                _id: p._id,
+                                name: p.name,
+                                price: p.price,
+                                quantity: p.quantity,
+                                bonus: p.bonus,
+                                total: p.total,
+                                is_delete: p.is_delete,
+                                is_enable: p.is_enable
+                            }
+                        })
+                        return res.json({
+                            data: response,
+                            error: null
+                        })
+                    })   
+                })
         }).catch(err => {
             return res.json({
                 data: null,
